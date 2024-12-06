@@ -113,3 +113,8 @@ Devnet
 devnet
 pre
 NextJs
+toml
+EVM
+SVM
+Solana
+dApps

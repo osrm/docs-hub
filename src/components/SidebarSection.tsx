@@ -26,7 +26,7 @@ export function SidebarSection({
   version,
 }: SectionProps) {
   const [isOpened, setIsOpened] = useState<boolean | undefined>(
-    book === 'guides' ||
+    (book.toLowerCase() === 'guides' && docSlug?.includes('guides')) ||
       docSlug?.includes(`/${book.toLowerCase()}/`) ||
       docSlug === `docs/${book.toLowerCase()}` ||
       (book === 'Intro' && !docSlug)
@@ -57,6 +57,18 @@ export function SidebarSection({
         break;
       case 'Migrations-and-disclosures':
         githubLink = 'https://github.com/FuelLabs/migrations-and-disclosures';
+        break;
+      case 'Fuel-book':
+        githubLink = 'https://github.com/FuelLabs/fuel-book';
+        break;
+      case 'Verified-addresses':
+        githubLink = 'https://github.com/FuelLabs/verified-addresses';
+        break;
+      case 'Guides':
+        githubLink = 'https://github.com/FuelLabs/docs-hub';
+        break;
+      case 'Integration-docs':
+        githubLink = 'https://github.com/FuelLabs/integration-docs';
         break;
       default:
         break;
@@ -91,6 +103,15 @@ export function SidebarSection({
           <Box.VStack gap='0' css={styles.sectionContainer}>
             {/* biome-ignore lint/suspicious/noExplicitAny: */}
             {links.map((link: any, index: number) => {
+              if (link.submenu) {
+                return (
+                  <SidebarSubmenu
+                    key={link.submenu[0].slug}
+                    onClick={onClick}
+                    {...link}
+                  />
+                );
+              }
               if (link.slug) {
                 return (
                   <SidebarLink
@@ -98,15 +119,6 @@ export function SidebarSection({
                     key={link.slug}
                     item={link}
                     isIndex={index === 0 && bookHasIndex}
-                  />
-                );
-              }
-              if (link.submenu) {
-                return (
-                  <SidebarSubmenu
-                    key={link.submenu[0].slug}
-                    onClick={onClick}
-                    {...link}
                   />
                 );
               }
